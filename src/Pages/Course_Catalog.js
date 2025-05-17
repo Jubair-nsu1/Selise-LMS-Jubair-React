@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/Header';
+import { Link } from 'react-router-dom';
 
 const CourseCatalog = () => {
   const [courses, setCourses] = useState([]);
@@ -106,19 +107,36 @@ const CourseCatalog = () => {
           {filteredCourses.length > 0 ? (
             filteredCourses.map(course => (
               <div key={course.id} className="col-md-4 mb-4">
-                <div className="card h-100">
-                  <div className="card-body">
-                    <h5 className="card-title">{course.title}</h5>
-                    <p className="card-text">
-                      <strong>Category:</strong> {course.category}<br />
-                      <strong>Duration:</strong> {course.duration} hours<br />
-                      <strong>Type:</strong> {course.isFree ? 'Free' : 'Paid'}
-                    </p>
-                    <a href={`/course-details/${course.id}`} className="btn btn-primary">View Details</a>
+                <Link
+                  to={`/course-details/${course.id}`}
+                  className="text-decoration-none text-dark"
+                >
+                  <div
+                    className="card h-100 shadow-sm transition"
+                    style={{
+                      transition: 'all 0.3s ease-in-out',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)';
+                      e.currentTarget.style.backgroundColor = '#f8f9fa';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = '';
+                      e.currentTarget.style.backgroundColor = '';
+                    }}
+                  >
+                    <div className="card-body">
+                      <h5 className="card-title">{course.title}</h5>
+                      <p className="card-text">
+                        <strong>Category:</strong> {course.category}<br />
+                        <strong>Duration:</strong> {course.duration} hours<br />
+                        <strong>Type:</strong> {course.isFree ? 'Free' : 'Paid'}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
-            ))
+            ))  
           ) : (
             <div className="col-12">
               <p className="text-center">No courses found.</p>

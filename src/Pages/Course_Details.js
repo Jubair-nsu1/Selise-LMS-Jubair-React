@@ -20,7 +20,6 @@ const CourseDetails = () => {
   console.log('CourseId extracted:', courseId);
 
   useEffect(() => {
-    // Use your utility function to get data from myAppData
     const coursesFromStorage = getLocalData('courses') || [];
     const enrollmentsFromStorage = getLocalData('enrollments') || [];
     
@@ -32,7 +31,6 @@ const CourseDetails = () => {
       return;
     }
     
-    // Find the course with the matching ID
     const selectedCourse = coursesFromStorage.find(c => c.id === courseId);
     console.log('Selected course:', selectedCourse);
     
@@ -58,7 +56,6 @@ const CourseDetails = () => {
       return;
     }
 
-    // Handle case where prerequisites might be undefined
     const prerequisites = course.prerequisites || [];
     
     const unmetPrerequisites = prerequisites.filter(
@@ -79,11 +76,7 @@ const CourseDetails = () => {
     };
 
     const updatedEnrollments = [...enrollments, newEnrollment];
-    // You'll need a setLocalData function to update the enrollment
-    // import { setLocalData } from '../Utils/localStorageUtils';
-    // setLocalData('enrollments', updatedEnrollments); 
     
-    // For now, updating local state only
     setEnrollments(updatedEnrollments);
     setMessage('Enrollment successful!');
   };
@@ -100,7 +93,6 @@ const CourseDetails = () => {
               <button 
                 className="btn btn-info"
                 onClick={() => {
-                  // Force a reload of data
                   const reloadCoursesFromStorage = getLocalData('courses') || [];
                   console.log('Manually reloaded courses:', reloadCoursesFromStorage);
                   setCourses(reloadCoursesFromStorage);
