@@ -5,11 +5,7 @@ const defaultUser = {
   id: Date.now(),
   name: '',
   email: '',
-  preferredCategories: [],
-  notifications: true,
 };
-
-const categories = ['Programming', 'Business', 'Marketing'];
 
 const MyProfile = () => {
   const [user, setUser] = useState(null);
@@ -27,20 +23,8 @@ const MyProfile = () => {
   }, []);
 
   const handleChange = e => {
-    const { name, value, type, checked } = e.target;
-    if (type === 'checkbox' && name === 'preferredCategories') {
-      setUser(prev => {
-        const current = prev.preferredCategories || [];
-        const updated = checked
-          ? [...current, value]
-          : current.filter(c => c !== value);
-        return { ...prev, preferredCategories: updated };
-      });
-    } else if (type === 'checkbox') {
-      setUser(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setUser(prev => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setUser(prev => ({ ...prev, [name]: value }));
   };
 
   const validateEmail = email =>
@@ -86,39 +70,6 @@ const MyProfile = () => {
               value={user.email}
               onChange={handleChange}
             />
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Preferred Categories</label>
-            <div>
-              {categories.map(cat => (
-                <div className="form-check form-check-inline" key={cat}>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    name="preferredCategories"
-                    value={cat}
-                    checked={user.preferredCategories.includes(cat)}
-                    onChange={handleChange}
-                  />
-                  <label className="form-check-label">{cat}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="form-check mb-3">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              name="notifications"
-              checked={user.notifications}
-              onChange={handleChange}
-              id="notifications"
-            />
-            <label className="form-check-label" htmlFor="notifications">
-              Receive Notifications
-            </label>
           </div>
 
           <button className="btn btn-primary" onClick={handleSave}>
