@@ -28,6 +28,8 @@ const CourseCatalog = () => {
       filtered = filtered.filter(course => course.isFree === isFree);
     }
 
+    console.log(isFreeFilter)
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
