@@ -9,11 +9,18 @@ const CourseCatalog = () => {
   const [isFreeFilter, setIsFreeFilter] = useState('');
   const [sortKey, setSortKey] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
   useEffect(() => {
-    const storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
-    setCourses(storedCourses);
-    setFilteredCourses(storedCourses);
+    setIsLoading(true); // start loading
+
+    // simulate loading delay for demo; remove setTimeout if not needed
+    setTimeout(() => {
+      const storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
+      setCourses(storedCourses);
+      setFilteredCourses(storedCourses);
+      setIsLoading(false); // finish loading
+    }, 500); // 0.5 second delay
   }, []);
 
   useEffect(() => {
@@ -27,8 +34,6 @@ const CourseCatalog = () => {
       const isFree = isFreeFilter === 'free';
       filtered = filtered.filter(course => course.isFree === isFree);
     }
-
-    console.log(isFreeFilter)
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -67,6 +72,7 @@ const CourseCatalog = () => {
               placeholder="Search by title or category"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
+              disabled={isLoading}
             />
           </div>
           <div className="col-md-2">
@@ -74,6 +80,7 @@ const CourseCatalog = () => {
               className="form-select"
               value={categoryFilter}
               onChange={e => setCategoryFilter(e.target.value)}
+              disabled={isLoading}
             >
               <option value="">All Categories</option>
               <option value="Programming">Programming</option>
@@ -86,6 +93,7 @@ const CourseCatalog = () => {
               className="form-select"
               value={isFreeFilter}
               onChange={e => setIsFreeFilter(e.target.value)}
+              disabled={isLoading}
             >
               <option value="">All</option>
               <option value="free">Free</option>
@@ -97,6 +105,7 @@ const CourseCatalog = () => {
               className="form-select"
               value={sortKey}
               onChange={e => setSortKey(e.target.value)}
+              disabled={isLoading}
             >
               <option value="">Sort By</option>
               <option value="title">Title</option>
@@ -105,50 +114,59 @@ const CourseCatalog = () => {
           </div>
         </div>
 
-        <div className="row">
-          {filteredCourses.length > 0 ? (
-            filteredCourses.map(course => (
-              <div key={course.id} className="col-md-4 mb-4">
-                <Link
-                  to={`/course-details/${course.id}`}
-                  className="text-decoration-none text-dark"
-                >
-                  <div
-                    className="card h-100 shadow-sm transition"
-                    style={{
-                      transition: 'all 0.3s ease-in-out',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)';
-                      e.currentTarget.style.backgroundColor = '#f8f9fa';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = '';
-                      e.currentTarget.style.backgroundColor = '';
-                    }}
-                  >
-                    <div className="card-body">
-                      <h5 className="card-title">{course.title}</h5>
-                      <p className="card-text">
-                        <strong>Category:</strong> {course.category}<br />
-                        <strong>Duration:</strong> {course.duration} hours<br />
-                        <strong>Type:</strong> {course.isFree ? 'Free' : 'Paid'}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ))  
-          ) : (
-            <div className="col-12">
-              <p className="text-center">No courses found.</p>
+        {isLoading ? (
+          <div className="d-flex justify-content-center my-5">
+            <div className="spinner-border text-primary" role="status" aria-label="Loading">
+              <span className="visually-hidden">Loading...</span>
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="row">
+            {filteredCourses.length > 0 ? (
+              filteredCourses.map(course => (
+                <div key={course.id} className="col-md-4 mb-4">
+                  <Link
+                    to={`/course-details/${course.id}`}
+                    className="text-decoration-none text-dark"
+                  >
+                    <div
+                      className="card h-100 shadow-sm transition"
+                      style={{
+                        transition: 'all 0.3s ease-in-out',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)';
+                        e.currentTarget.style.backgroundColor = '#f8f9fa';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.boxShadow = '';
+                        e.currentTarget.style.backgroundColor = '';
+                      }}
+                    >
+                      <div className="card-body">
+                        <h5 className="card-title">{course.title}</h5>
+                        <p className="card-text">
+                          <strong>Category:</strong> {course.category}
+                          <br />
+                          <strong>Duration:</strong> {course.duration} hours
+                          <br />
+                          <strong>Type:</strong> {course.isFree ? 'Free' : 'Paid'}
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <div className="col-12">
+                <p className="text-center">No courses found.</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
 };
 
 export default CourseCatalog;
-  
