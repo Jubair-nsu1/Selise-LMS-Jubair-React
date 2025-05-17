@@ -8,6 +8,7 @@ const MyLearning = () => {
   const [enrollments, setEnrollments] = useState([]);
   const [courses, setCourses] = useState([]);
 
+  console.log(courses);
   useEffect(() => {
     const allEnrollments = JSON.parse(localStorage.getItem('enrollments')) || [];
     const userEnrollments = allEnrollments.filter(e => e.userId === user.userId);

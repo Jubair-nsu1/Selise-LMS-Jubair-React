@@ -11,7 +11,7 @@ const MyProfile = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
-  // Load from localStorage or initialize default user
+  // Load from localStorage
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
